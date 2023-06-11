@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 from torch.utils.data.distributed import DistributedSampler
 
 from peft import LoraConfig, get_peft_model
-from transformers import AutoConfig, AutoTokenizer, AutoModelForCausalLM, DataCollatorForSeq2Seq
+from transformers import AutoConfig, AutoTokenizer, AutoModelForCausalLM, DataCollatorForSeq2Seq, AutoModelForSequenceClassification
 
 from contextlib import nullcontext
 from torch.cuda.amp import GradScaler, autocast
