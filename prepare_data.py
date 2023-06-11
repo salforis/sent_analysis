@@ -6,7 +6,7 @@ from typing import Union
 
 
 
-def create_datasets(data_path, size_valid_set, tokenizer, max_length, seed):
+def create_datasets(data_path, tokenizer, max_length, seed):
     # def tokenize(prompt, add_eos_token=True):
         # result = tokenizer(
         #     prompt,

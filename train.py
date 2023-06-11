@@ -218,7 +218,7 @@ class Trainer:
             tokenizer=self.tokenizer,
             max_length=self.max_length,
             data_path=data_path,
-            size_valid_set=size_valid_set,
+            # size_valid_set=size_valid_set,
             seed=seed
         )
 
@@ -370,7 +370,7 @@ if __name__ == "__main__":
     # execute trainer
     trainer.run(
         data_path=data_path,
-        size_valid_set=size_valid_set,
+        # size_valid_set=size_valid_set,
         seed=seed
     )
 
