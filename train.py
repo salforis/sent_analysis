@@ -24,8 +24,8 @@ class Trainer:
                  gpu_id: int,
                  is_ddp_training: bool = True,
                  output_dir: str = 'checkpoints/',
-                 num_epochs: int = 10,
-                 max_length: int = 128,
+                 num_epochs: int = 20,
+                 max_length: int = 256,
                  batch_size: int = 8,
                  mixed_precision_dtype=None,
                  gradient_accumulation_steps: int = 16):
@@ -276,10 +276,12 @@ def _is_master_process():
 def load_pretrained_model(local_rank, model_path: str = ""):
     # TODO: Load a pretrained AutoModelForCausalLM from the 'model_path' in float16 data type.
     # Make sure to set 'device_map' to '{"": torch.device(f"cuda:{local_rank}")}' for DDP training.
-    model = AutoModelForCausalLM.from_pretrained(
+    model = AutoModelForSequenceClassification.from_pretrained(
         model_path,
         torch_dtype = torch.float16,
         device_map = {"": torch.device(f"cuda:{local_rank}")}
+
+    # model = AutoModelForSequenceClassification.from_pretrained("vinai/phobert-base-v2")
     ) ### YOUR CODE HERE ###
     # TODO: Create a LoraConfig with the parameters: r=8, lora_alpha=16,
     # lora_dropout=0.05, bias="none", task_type="CAUSAL_LM".
@@ -295,8 +297,8 @@ def load_pretrained_model(local_rank, model_path: str = ""):
     ) ### YOUR CODE HERE ###
 
     # Create LoRA model
-    model = LoraModelForCasualLM(model, lora_config)
-    #model = get_peft_model(model, lora_config) # Uncomment this line to use PEFT library instead of your implementation in `lora_layer.py`.
+    # model = LoraModelForCasualLM(model, lora_config)
+    model = get_peft_model(model, lora_config) # Uncomment this line to use PEFT library instead of your implementation in `lora_layer.py`.
     if _is_master_process():
         model.print_trainable_parameters()
 
@@ -308,12 +310,13 @@ if __name__ == "__main__":
     DRIVER_DATA_PATH = 'https://drive.google.com/file/d/1QpgvQi6mFvN5-6ofmJunDbuz34tlLbLL/view?usp=sharing'
 
     backend = "nccl"
-    model_path = 'bigscience/bloom-1b7'
-    if os.environ.get("DEBUG"):
-        data_path = 'test_data.json'
-    else:
-        data_path = 'alpaca_data.json'
-        download_from_driver(path=DRIVER_DATA_PATH, location_path=data_path)
+    model_path = 'vinai/phobert-base-v2'
+    # if os.environ.get("DEBUG"):
+    #     data_path = 'test_data.json'
+    # else:
+    #     data_path = 'alpaca_data.json'
+    #     download_from_driver(path=DRIVER_DATA_PATH, location_path=data_path)
+    data_path = "/kaggle/working/dataset_train_test_val_split"
 
     size_valid_set = 0.1
     max_length = 512

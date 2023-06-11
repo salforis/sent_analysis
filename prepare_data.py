@@ -42,7 +42,7 @@ def create_datasets(data_path, size_valid_set, tokenizer, max_length, seed):
     prompter = Prompter()
 
     print(f"Load dataset....")
-    dataset = load_dataset('json', split='train', data_files=data_path)
+    dataset = load_from_disk(data_path)
     dataset = dataset.train_test_split(test_size=size_valid_set, seed=seed)
 
     train_data = dataset["train"].shuffle().map(generate_and_tokenize_prompt)
