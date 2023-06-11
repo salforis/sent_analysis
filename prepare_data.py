@@ -1,5 +1,5 @@
 from prompt import Prompter
-from datasets import load_dataset
+from datasets import load_dataset, load_from_disk
 import random
 
 from typing import Union
